@@ -1,5 +1,6 @@
 from collections import deque
 import heapq
+from time import sleep
 
 f = open("supermarkt.txt", "w")
 fc = open("supermarkt_customer.txt", "w")
@@ -55,16 +56,7 @@ class Ev:
 
 class EvQueue:
 # please implement here
-
-
-# class consists of
-# name: station name
-# buffer: customer queue
-# delay_per_item: service time
-# CustomerWaiting, busy: possible states of this station
-class Station():
-# please implement here
-
+    pass
 
 # class consists of
 # statistics variables
@@ -76,7 +68,40 @@ class Customer():
     duration = 0
     duration_cond_complete = 0
     count = 0
+
+    pass
 # please implement here
+
+# class consists of
+# name: station name
+# buffer: customer queue
+# delay_per_item: service time
+# CustomerWaiting, busy: possible states of this station
+class Station():
+
+    buffer: heapq = []
+    busy: bool = False
+
+    # please implement here
+    def __init__(self, delay_per_item: int, name: str) -> None:
+        self.delay_per_item = delay_per_item
+        self.name = name
+
+    def anstellen(self, customer: Customer):
+        self.buffer.heappush(customer)
+        self.bedienen()
+
+    def bedienen(self):
+        while len(self.buffer) is not 0:
+            if self.busy is False:
+                customer: Customer = self.buffer.heappop()
+                self.busy = True
+                sleep(self.delay_per_item * customer.count)
+                self.fertig()
+
+    def fertig(self):
+        self.busy = False
+
 
 
 
@@ -110,8 +135,7 @@ startCustomers(einkaufsliste1, 'A', 0, 200, 30 * 60 + 1)
 startCustomers(einkaufsliste2, 'B', 1, 60, 30 * 60 + 1)
 evQ.start()
 my_print('Simulationsende: %is' % EvQueue.time)
-my_print('Anzahl Kunden: %i' % (Customer.count
-                                ))
+my_print('Anzahl Kunden: %i' % (Customer.count))
 my_print('Anzahl vollständige Einkäufe %i' % Customer.complete)
 x = Customer.duration / Customer.count
 my_print(str('Mittlere Einkaufsdauer %.2fs' % x))
