@@ -42,6 +42,27 @@ class Customer:
     def eventAnkuftStation(self, args=()):
         print("ankunft station")
 
+        timestampTodo = 0
+
+        einkauf = self.einkaufsliste.pop(0)
+        station = einkauf[1]
+        maxQueue = einkauf[2]
+
+        # verlassen bei max queue
+        if len(einkauf.buffer) > maxQueue:
+            # append dropped dict self, station
+            event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
+            EventQueue.push(event)
+        else:
+            # einreihen
+            station.anstellen(self)
+            event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
+            EventQueue.push(event)
+
+
+
+
+
     # Verlassen einer Station
     #- Ereignis Ankun an der nächsten Station erzeugen
     #- wenn sich weitere KundInnnen in der Warteschlange be nden, erste KundIn aus der
@@ -49,5 +70,8 @@ class Customer:
     # erzeugen
     def eventVerlassenStation(self, args=()):
         print("verlasse station")
-        #einkauf fertig? sonst naechste station anstellen
-
+        timestampTodo = 0
+        einkauf = self.einkaufsliste
+        if len(einkauf):
+            event = Event(timestampTodo, self.eventAnkuftStation, prio=1)
+            EventQueue.push(event)

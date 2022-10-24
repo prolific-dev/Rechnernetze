@@ -16,7 +16,6 @@ class Station:
 
         self.buffer = []
         self.busy = False
-        self.customerWaiting = False
 
     def anstellen(self, customer: Customer):
         heapq.heappush(self.buffer, customer)
