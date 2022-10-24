@@ -26,7 +26,8 @@ class Station:
             if self.busy is False:
                 customer: Customer = heapq.heappop(self.buffer)
                 self.busy = True
-                sleep(self.delay_per_item * customer.count)
+                # sleep(self.delay_per_item * customer.count)
+                sleep(self.delay_per_item * customer.count / 10) # DEBUG MODE
                 self.fertig()
 
     def fertig(self):
