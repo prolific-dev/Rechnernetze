@@ -49,15 +49,12 @@ class Customer:
         maxQueue = einkauf[2]
 
         # verlassen bei max queue
-        if len(einkauf.buffer) > maxQueue:
+        if len(einkauf.buffer) <= maxQueue:
             # append dropped dict self, station
-            event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
-            EventQueue.push(event)
-        else:
-            # einreihen
             station.anstellen(self)
-            event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
-            EventQueue.push(event)
+
+        event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
+        EventQueue.push(event)
 
 
 
