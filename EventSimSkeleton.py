@@ -1,5 +1,5 @@
 from Customer import Customer
-from EvQueue import EvQueue
+from EventQueue import EventQueue
 from Event import Event
 from Station import Station
 
@@ -16,16 +16,14 @@ def my_print(msg):
 
 # print on console and into customer log
 def my_print1(customerName, stationName, msg):
-    t = EvQueue.time
-    text = f'{round(t, 4)}:{customerName} {msg} at {stationName}\n'
+    text = f'{EventQueue.time.now():%Y-%m-%d %H:%M}:{customerName} {msg} at {stationName}\n'
     print(text)
     fc.write(text)
 
 
 # print on console and into station log
 def my_print2(stationName, msg, customerName):
-    t = EvQueue.time
-    text = f'{round(t, 4)}: {stationName} {msg} {customerName}\n'
+    text = f'{EventQueue.time.now():%Y-%m-%d %H:%M}: {stationName} {msg} {customerName}\n'
     print(text)
     fs.write(text)
 
@@ -35,14 +33,14 @@ def startCustomers(einkaufsliste, name, sT, dT, mT):
     t = sT
     while t < mT:
         kunde = Customer(einkaufsliste, name + str(i), t)
-        ev = Event(t, kunde.run, prio=1)
+        ev = Event(t, kunde.eventBeginnEinkauf, prio=1)
         evQ.push(ev)
         i += 1
         t += dT
 
 
 if __name__ == '__main__':
-    evQ = EvQueue()
+    evQ = EventQueue()
     baecker = Station(10, 'Bäcker')
     metzger = Station(30, 'Metzger')
     kaese = Station(60, 'Käse')
@@ -61,7 +59,7 @@ if __name__ == '__main__':
     startCustomers(einkaufsliste2, 'B', 1, 60, 30 * 60 + 1)
     evQ.start()
 
-    my_print(f'Simulationsende: {EvQueue.time:%Y-%m-%d %H:%M}')
+    my_print(f'Simulationsende: {EventQueue.time.now():%Y-%m-%d %H:%M}')
     my_print(f'Anzahl Kunden: {Customer.count}')
     my_print(f'Anzahl vollständige Einkäufe {Customer.complete}')
     x = Customer.duration / Customer.count

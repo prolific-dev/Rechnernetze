@@ -6,8 +6,8 @@
 class Event:
     counter = 0
 
-    def __init__(self, t, work, args=(), prio=255):
-        self.t = t
+    def __init__(self, timestamp, work, args=(), prio=255):
+        self.t = timestamp
         self.n = Event.counter
         self.work = work
         self.args = args
