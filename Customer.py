@@ -40,7 +40,6 @@ class Customer:
     #  oder im Falle einer direkten Bedienung das Ereignis Verlassen der Sta on erzeugen
     #- wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
     def eventAnkuftStation(self, args=()):
-
         timestampTodo = 0
 
         einkauf = self.einkaufsliste.pop(0)
@@ -52,13 +51,10 @@ class Customer:
         # verlassen bei max queue
         if len(station.buffer) > maxQueue:
             # append dropped dict self, station
-            event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
-            EventQueue.push(event)
-        else:
-            # einreihen
             station.anstellen(self)
-            event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
-            EventQueue.push(event)
+
+        event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
+        EventQueue.push(event)
 
 
     # Verlassen einer Station
