@@ -23,16 +23,16 @@ class Customer:
     #- Ereignis Ankunft an der ersten Station erzeugen
     #- nächstes Ereignis Beginn des Einkaufs für den gleichen KundInnen-Typ erzeugen
     def eventBeginnEinkauf(self, args=()):
-        print("beginn einkauf")
+        print("beginn einkauf\n")
         timestampTodo = 0
         #sleep(args[0])
 
         event = Event(timestampTodo, self.eventAnkuftStation, prio=1)
         EventQueue.push(event)
 
-        timestampTodo = 0
-        event = Event(timestampTodo, self.eventBeginnEinkauf, prio=1)
-        EventQueue.push(event)
+        # timestampTodo = 0
+        # event = Event(timestampTodo, self.eventBeginnEinkauf, prio=1)
+        # EventQueue.push(event)
 
     #Ankun an einer Station
     #- anhand der Warteschlangenlänge überprüfen, ob an der Station eingekauft wird
@@ -40,16 +40,17 @@ class Customer:
     #  oder im Falle einer direkten Bedienung das Ereignis Verlassen der Sta on erzeugen
     #- wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
     def eventAnkuftStation(self, args=()):
-        print("ankunft station")
 
         timestampTodo = 0
 
         einkauf = self.einkaufsliste.pop(0)
         station = einkauf[1]
+        print(f"ankunft an station {station.name}")
+
         maxQueue = einkauf[2]
 
         # verlassen bei max queue
-        if len(einkauf.buffer) > maxQueue:
+        if len(station.buffer) > maxQueue:
             # append dropped dict self, station
             event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
             EventQueue.push(event)
@@ -58,9 +59,6 @@ class Customer:
             station.anstellen(self)
             event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
             EventQueue.push(event)
-
-
-
 
 
     # Verlassen einer Station
@@ -72,6 +70,9 @@ class Customer:
         print("verlasse station")
         timestampTodo = 0
         einkauf = self.einkaufsliste
+
         if len(einkauf):
             event = Event(timestampTodo, self.eventAnkuftStation, prio=1)
             EventQueue.push(event)
+        else:
+            Customer.complete += 1

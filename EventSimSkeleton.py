@@ -31,12 +31,12 @@ def my_print2(stationName, msg, customerName):
 def startCustomers(einkaufsliste, name, sT, dT, mT):
     i = 1
     t = sT
-    while t < mT:
-        kunde = Customer(einkaufsliste, name + str(i), t)
-        ev = Event(t, kunde.eventBeginnEinkauf, prio=1)
-        evQ.push(ev)
-        i += 1
-        t += dT
+    #while t < mT:
+    kunde = Customer(einkaufsliste, name + str(i), t)
+    ev = Event(t, kunde.eventBeginnEinkauf, prio=1)
+    evQ.push(ev)
+    i += 1
+    t += dT
 
 
 if __name__ == '__main__':
@@ -67,9 +67,9 @@ if __name__ == '__main__':
     x = Customer.duration_cond_complete / Customer.complete
     my_print(f'Mittlere Einkaufsdauer (vollständig): {x:.2f}s')
 
-    for station in ('Bäcker', 'Metzger', 'Käse', 'Kasse'):
-        x = Customer.dropped[station] / (Customer.served[station] + Customer.dropped[station]) * 100
-        my_print(f'Drop percentage at {station}: {x:.2f}')
+    # for station in ('Bäcker', 'Metzger', 'Käse', 'Kasse'):
+    #     x = Customer.dropped[station] / (Customer.served[station] + Customer.dropped[station]) * 100
+    #     my_print(f'Drop percentage at {station}: {x:.2f}')
 
     f.close()
     fc.close()

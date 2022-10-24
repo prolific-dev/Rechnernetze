@@ -29,3 +29,4 @@ class EventQueue:
             event = EventQueue.pop()
             t = threading.Thread(target=event.work, args=event.args)
             t.start()
+            t.join()
