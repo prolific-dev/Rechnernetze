@@ -53,6 +53,7 @@ if __name__ == '__main__':
     Customer.dropped['Metzger'] = 0
     Customer.dropped['Käse'] = 0
     Customer.dropped['Kasse'] = 0
+    # stations bearbeitungszeit, stationsname, MaxQueue Wartezeit, Anzahl zu kaufenden Produkte
     einkaufsliste1 = [(10, baecker, 10, 10), (30, metzger, 5, 10), (45, kaese, 3, 5), (60, kasse, 30, 20)]
     einkaufsliste2 = [(30, metzger, 2, 5), (30, kasse, 3, 20), (20, baecker, 3, 20)]
     startCustomers(einkaufsliste1, 'A', 0, 200, 30 * 60 + 1)
