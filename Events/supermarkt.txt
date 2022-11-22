@@ -1,9 +1,0 @@
-0: Beginn Einkauf A1
-1: Beginn Einkauf B1
- vollständige Einkäufe 2
-Mittlere Einkaufsdauer 0.00s
-Mittlere Einkaufsdauer (vollständig): 0.00s
-Drop percentage at Bäcker: 0.00
-Drop percentage at Metzger: 0.00
-Drop percentage at Käse: 0.00
-Drop percentage at Kasse: 0.00
