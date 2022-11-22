@@ -1,0 +1,14 @@
+0s: A1 Ankunft at Bäcker
+1s: A1 Verlassen at Bäcker
+1s: B1 Ankunft at Metzger
+2s: B1 Verlassen at Metzger
+2s: A1 Ankunft at Metzger
+3s: A1 Verlassen at Metzger
+4s: B1 Ankunft at Kasse
+4s: B1 Verlassen at Kasse
+4s: A1 Ankunft at Käse
+6s: A1 Verlassen at Käse
+6s: B1 Ankunft at Bäcker
+7s: B1 Verlassen at Bäcker
+7s: A1 Ankunft at Kasse
+9s: A1 Verlassen at Kasse
