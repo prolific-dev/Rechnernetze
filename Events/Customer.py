@@ -39,11 +39,11 @@ class Customer:
     def eventAnkuftStation(self, args=()):
         from EventSimSkeleton import my_print1
         einkauf = self.einkaufsliste[0]
-        tStation = einkauf[0] # dauer bis ankunft bei station
+        import EventSimSkeleton
+        tStation = einkauf[0] / EventSimSkeleton.simuFactor  # dauer bis ankunft bei station
         print(f"sleep time ankunft station {tStation}")
         sleep(tStation)
         station = einkauf[1]
-
 
         my_print1(self.name, station.name, "Ankunft")
 
@@ -71,8 +71,6 @@ class Customer:
         station = einkauf[1]
 
         my_print1(self.name, station.name, "Verlassen")
-
-        einkauf = self.einkaufsliste
 
         if len(einkauf):
             event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=3)

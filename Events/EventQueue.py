@@ -29,7 +29,9 @@ class EventQueue:
     def start():
         while EventQueue.q:
             event = EventQueue.pop()
-            event.work(event.args)
+            t = threading.Thread(target=event.work, args=event.args)
+            t.start()
+            t.join()
 
 
     @staticmethod
