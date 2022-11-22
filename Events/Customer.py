@@ -41,8 +41,6 @@ class Customer:
         einkauf = self.einkaufsliste[0]
         import EventSimSkeleton
         tStation = einkauf[0] / EventSimSkeleton.simuFactor  # dauer bis ankunft bei station
-        print(f"sleep time ankunft station {tStation}")
-        sleep(tStation)
         station = einkauf[1]
 
         my_print1(self.name, station.name, "Ankunft")

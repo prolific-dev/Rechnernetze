@@ -40,8 +40,8 @@ class Customer:
         from EventSimSkeleton import my_print1
         einkauf = self.einkaufsliste[0]
         tStation = einkauf[0] # dauer bis ankunft bei station
-        print(f"sleep time ankunft station {tStation}")
-        sleep(tStation)
+        #print(f"sleep time ankunft station {tStation}")
+        #sleep(tStation)
         station = einkauf[1]
 
 
