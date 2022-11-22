@@ -72,7 +72,7 @@ class Customer:
 
         my_print1(self.name, station.name, "Verlassen")
 
-        if len(einkauf):
+        if len(self.einkaufsliste):
             event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=3)
             EventQueue.push(event)
         else:
