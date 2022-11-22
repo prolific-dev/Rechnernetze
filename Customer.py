@@ -25,7 +25,6 @@ class Customer:
     #- Ereignis Ankunft an der ersten Station erzeugen
     #- nächstes Ereignis Beginn des Einkaufs für den gleichen KundInnen-Typ erzeugen
     def eventBeginnEinkauf(self, args=()):
-        einkauf = self.einkaufsliste[0]
         from EventSimSkeleton import my_print
         my_print(f"{self.t}: Beginn Einkauf {self.name}")
         event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=1)
@@ -40,21 +39,23 @@ class Customer:
     def eventAnkuftStation(self, args=()):
         from EventSimSkeleton import my_print1
         einkauf = self.einkaufsliste[0]
-        tStation = einkauf[0]# dauer bis ankunft bei station
+        tStation = einkauf[0] # dauer bis ankunft bei station
+        print(f"sleep time ankunft station {tStation}")
         sleep(tStation)
         station = einkauf[1]
 
 
         my_print1(self.name, station.name, "Ankunft")
 
-        maxQueue = einkauf[2]
+        maxQueue = einkauf[3]
 
         # verlassen bei max queue
         if len(station.buffer) <= maxQueue:
-            # append dropped dict self, station
             station.anstellen(self)
+        else:
+            Customer.dropped[station.name] += 1
 
-        event = Event(EventQueue.getCurentTimeStamp(), self.eventVerlassenStation, prio=1)
+        event = Event(EventQueue.getCurentTimeStamp(), self.eventVerlassenStation, prio=2)
         EventQueue.push(event)
 
 
@@ -74,7 +75,7 @@ class Customer:
         einkauf = self.einkaufsliste
 
         if len(einkauf):
-            event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=1)
+            event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=3)
             EventQueue.push(event)
         else:
             Customer.complete += 1

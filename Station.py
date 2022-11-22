@@ -3,7 +3,6 @@
 # buffer: customer queue
 # delay_per_item: service time
 # CustomerWaiting, busy: possible states of this station
-import heapq
 from time import sleep
 
 from Customer import Customer
@@ -18,16 +17,19 @@ class Station:
         self.busy = False
 
     def anstellen(self, customer: Customer):
-        heapq.heappush(self.buffer, customer)
+        self.buffer.append(customer)
         self.bedienen()
 
     def bedienen(self):
         while len(self.buffer):
             if self.busy is False:
-                customer: Customer = heapq.heappop(self.buffer)
                 self.busy = True
-                sleep(self.delay_per_item * customer.count / 10)
-                # sleep(self.delay_per_item * customer.count / 10) # DEBUG MODE
+                customer: Customer = self.buffer.pop(0)
+                numItems = customer.einkaufsliste[0][2]
+                sleepTime = self.delay_per_item * numItems
+                print(f"sleep time bedienen {sleepTime}")
+                sleep(sleepTime)
+                Customer.served[self.name] += 1
                 self.fertig()
 
     def fertig(self):

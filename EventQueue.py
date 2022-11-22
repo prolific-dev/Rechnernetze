@@ -6,10 +6,12 @@
 import heapq
 import threading
 from datetime import datetime
+from heapq import heapify
 
 
 class EventQueue:
     q = []
+    heapify(q)
     startTime = datetime.now()
     evCount = 0
 
@@ -25,11 +27,10 @@ class EventQueue:
 
     @staticmethod
     def start():
-        while len(EventQueue.q):
+        while EventQueue.q:
             event = EventQueue.pop()
-            t = threading.Thread(target=event.work, args=event.args)
-            t.start()
-            t.join()
+            event.work(event.args)
+
 
     @staticmethod
     def getCurentTimeStamp():
