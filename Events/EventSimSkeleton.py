@@ -13,21 +13,18 @@ simuFactor = 1 # default 1
 
 # print on console and into supermarket log
 def my_print(msg):
-    print(msg)
     f.write(msg + '\n')
 
 
 # print on console and into customer log
 def my_print1(customerName, stationName, msg):
     text = f'{EventQueue.getCurentTimeStamp()}s: {customerName} {msg} at {stationName}\n'
-    print(text)
     fc.write(text)
 
 
 # print on console and into station log
 def my_print2(stationName, msg, customerName):
     text = f'{EventQueue.getCurentTimeStamp()}s: {stationName} {msg} {customerName}\n'
-    print(text)
     fs.write(text)
 
 
