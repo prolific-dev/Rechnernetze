@@ -12,25 +12,25 @@ class Station:
     def __init__(self, delay_per_item: int, name: str) -> None:
         self.delay_per_item = delay_per_item
         self.name = name
-
         self.buffer = []
         self.busy = False
 
     def anstellen(self, customer: Customer):
         self.buffer.append(customer)
-        self.bedienen()
+        print(len(self.buffer))
+        if not self.busy:
+            self.bedienen()
 
     def bedienen(self):
+        self.busy = True
         while len(self.buffer):
-            if self.busy is False:
-                self.busy = True
-                customer: Customer = self.buffer.pop(0)
-                numItems = customer.einkaufsliste[0][2]
-                import EventSimSkeleton
-                sleepTime = self.delay_per_item * numItems / EventSimSkeleton.simuFactor
-                sleep(sleepTime)
-                Customer.served[self.name] += 1
-                self.fertig()
+            customer: Customer = self.buffer.pop(0)
+            numItems = customer.einkaufsliste[0][2]
+            import EventSimSkeleton
+            sleepTime = self.delay_per_item * numItems / EventSimSkeleton.simuFactor
+            sleep(sleepTime)
+            Customer.served[self.name] += 1
+        self.fertig()
 
     def fertig(self):
         self.busy = False
