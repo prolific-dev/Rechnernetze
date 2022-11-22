@@ -17,7 +17,6 @@ class Station:
 
     def anstellen(self, customer: Customer):
         self.buffer.append(customer)
-        print(len(self.buffer))
         if not self.busy:
             self.bedienen()
 

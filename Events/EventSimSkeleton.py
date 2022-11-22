@@ -5,9 +5,9 @@ from EventQueue import EventQueue
 from Event import Event
 from Station import Station
 
-f = open("Events\supermarkt.txt", "w")
-fc = open("Events\supermarkt_customer.txt", "w")
-fs = open("Events\supermarkt_station.txt", "w")
+f = open("./supermarkt.txt", "w")
+fc = open("./supermarkt_customer.txt", "w")
+fs = open("./supermarkt_station.txt", "w")
 
 simuFactor = 1 # default 1
 
