@@ -1,13 +1,14 @@
 # class consists of
 # statistics variables
 # and methods as described in the problem description
+from threading import Thread
 from time import sleep
 
 from Event import Event
 from EventQueue import EventQueue
 
 
-class Customer:
+class Customer(Thread):
     served = {}
     dropped = {}
     complete = 0
@@ -16,6 +17,7 @@ class Customer:
     count = 0
 
     def __init__(self, einkaufsliste, name, t):
+        Thread.__init__(self)
         self.einkaufsliste = einkaufsliste
         self.name = name
         self.t = t
@@ -37,15 +39,13 @@ class Customer:
     #  oder im Falle einer direkten Bedienung das Ereignis Verlassen der Sta on erzeugen
     #- wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
     def eventAnkuftStation(self, args=()):
-        from EventSimSkeleton import my_print1
         einkauf = self.einkaufsliste[0]
-        tStation = einkauf[0] # dauer bis ankunft bei station
-        #print(f"sleep time ankunft station {tStation}")
-        #sleep(tStation)
+        import EventSimSkeleton
+        tStation = einkauf[0] + EventSimSkeleton.simuFactor  # dauer bis ankunft bei station
+        sleep(tStation)
         station = einkauf[1]
 
-
-        my_print1(self.name, station.name, "Ankunft")
+        EventSimSkeleton.my_print1(self.name, station.name, "Ankunft")
 
         maxQueue = einkauf[3]
 
@@ -72,9 +72,7 @@ class Customer:
 
         my_print1(self.name, station.name, "Verlassen")
 
-        einkauf = self.einkaufsliste
-
-        if len(einkauf):
+        if len(self.einkaufsliste):
             event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=3)
             EventQueue.push(event)
         else:

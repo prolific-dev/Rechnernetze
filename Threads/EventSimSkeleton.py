@@ -1,14 +1,15 @@
-from datetime import datetime
+from copy import copy
 
 from Customer import Customer
 from EventQueue import EventQueue
 from Event import Event
 from Station import Station
 
-f = open("Threads\supermarkt.txt", "w")
-fc = open("Threads\supermarkt_customer.txt", "w")
-fs = open("Threads\supermarkt_station.txt", "w")
+f = open("./supermarkt.txt", "w")
+fc = open("./supermarkt_customer.txt", "w")
+fs = open("./supermarkt_station.txt", "w")
 
+simuFactor = 1000 # default 1
 
 # print on console and into supermarket log
 def my_print(msg):
@@ -31,8 +32,8 @@ def startCustomers(einkaufsliste, name, sT, dT, mT):
     i = 1
     t = sT
     while t < mT:
-        kunde = Customer(einkaufsliste, name + str(i), t)
-        ev = Event(t, kunde.eventBeginnEinkauf, prio=1)
+        kunde = Customer(copy(einkaufsliste), name + str(i), t)
+        ev = Event(t, kunde.eventBeginnEinkauf, prio=2)
         evQ.push(ev)
         i += 1
         t += dT
