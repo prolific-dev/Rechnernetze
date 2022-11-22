@@ -27,7 +27,7 @@ class Customer:
     def eventBeginnEinkauf(self, args=()):
         from EventSimSkeleton import my_print
         my_print(f"{self.t}: Beginn Einkauf {self.name}")
-        event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=1)
+        event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=2)
         EventQueue.push(event)
 
 
@@ -55,7 +55,7 @@ class Customer:
         else:
             Customer.dropped[station.name] += 1
 
-        event = Event(EventQueue.getCurentTimeStamp(), self.eventVerlassenStation, prio=2)
+        event = Event(EventQueue.getCurentTimeStamp(), self.eventVerlassenStation, prio=1)
         EventQueue.push(event)
 
 
