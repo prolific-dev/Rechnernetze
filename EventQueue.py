@@ -10,7 +10,7 @@ from datetime import datetime
 
 class EventQueue:
     q = []
-    time = datetime
+    startTime = datetime.now()
     evCount = 0
 
     @staticmethod
@@ -30,3 +30,8 @@ class EventQueue:
             t = threading.Thread(target=event.work, args=event.args)
             t.start()
             t.join()
+
+    @staticmethod
+    def getCurentTimeStamp():
+        timeDelta = datetime.now() - EventQueue.startTime
+        return timeDelta.seconds

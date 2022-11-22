@@ -28,8 +28,7 @@ class Customer:
         einkauf = self.einkaufsliste[0]
         from EventSimSkeleton import my_print
         my_print(f"{self.t}: Beginn Einkauf {self.name}")
-        timestampTodo = 0
-        event = Event(timestampTodo, self.eventAnkuftStation, prio=1)
+        event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=1)
         EventQueue.push(event)
 
 
@@ -40,9 +39,6 @@ class Customer:
     #- wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
     def eventAnkuftStation(self, args=()):
         from EventSimSkeleton import my_print1
-
-        timestampTodo = 0
-
         einkauf = self.einkaufsliste[0]
         tStation = einkauf[0]# dauer bis ankunft bei station
         sleep(tStation)
@@ -58,7 +54,7 @@ class Customer:
             # append dropped dict self, station
             station.anstellen(self)
 
-        event = Event(timestampTodo, self.eventVerlassenStation, prio=1)
+        event = Event(EventQueue.getCurentTimeStamp(), self.eventVerlassenStation, prio=1)
         EventQueue.push(event)
 
 
@@ -73,14 +69,12 @@ class Customer:
         einkauf = self.einkaufsliste.pop(0)
         station = einkauf[1]
 
-
         my_print1(self.name, station.name, "Verlassen")
 
-        timestampTodo = 0
         einkauf = self.einkaufsliste
 
         if len(einkauf):
-            event = Event(timestampTodo, self.eventAnkuftStation, prio=1)
+            event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=1)
             EventQueue.push(event)
         else:
             Customer.complete += 1

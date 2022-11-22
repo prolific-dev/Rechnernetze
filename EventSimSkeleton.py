@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from Customer import Customer
 from EventQueue import EventQueue
 from Event import Event
@@ -16,14 +18,14 @@ def my_print(msg):
 
 # print on console and into customer log
 def my_print1(customerName, stationName, msg):
-    text = f'{EventQueue.time.now():%Y-%m-%d %H:%M}:{customerName} {msg} at {stationName}\n'
+    text = f'{EventQueue.getCurentTimeStamp()}s: {customerName} {msg} at {stationName}\n'
     print(text)
     fc.write(text)
 
 
 # print on console and into station log
 def my_print2(stationName, msg, customerName):
-    text = f'{EventQueue.time.now():%Y-%m-%d %H:%M}: {stationName} {msg} {customerName}\n'
+    text = f'{EventQueue.getCurentTimeStamp()}s: {stationName} {msg} {customerName}\n'
     print(text)
     fs.write(text)
 
@@ -60,7 +62,7 @@ if __name__ == '__main__':
     startCustomers(einkaufsliste2, 'B', 1, 60, 30 * 60 + 1)
     evQ.start()
 
-    my_print(f'Simulationsende: {EventQueue.time.now():%Y-%m-%d %H:%M}')
+    my_print(f'Simulationsende: {EventQueue.getCurentTimeStamp()}')
     my_print(f'Anzahl Kunden: {Customer.count}')
     my_print(f'Anzahl vollständige Einkäufe {Customer.complete}')
     x = Customer.duration / Customer.count
