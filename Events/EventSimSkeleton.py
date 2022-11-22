@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from Customer import Customer
 from EventQueue import EventQueue
 from Event import Event
@@ -7,7 +9,7 @@ f = open("supermarkt.txt", "w")
 fc = open("supermarkt_customer.txt", "w")
 fs = open("supermarkt_station.txt", "w")
 
-simuFactor = 100 # default 1
+simuFactor = 1 # default 1
 
 # print on console and into supermarket log
 def my_print(msg):
@@ -32,12 +34,12 @@ def my_print2(stationName, msg, customerName):
 def startCustomers(einkaufsliste, name, sT, dT, mT):
     i = 1
     t = sT
-    #while t < mT:
-    kunde = Customer(einkaufsliste, name + str(i), t)
-    ev = Event(t, kunde.eventBeginnEinkauf, prio=2)
-    evQ.push(ev)
-    i += 1
-    t += dT
+    while t < mT:
+        kunde = Customer(deepcopy(einkaufsliste), name + str(i), t)
+        ev = Event(t, kunde.eventBeginnEinkauf, prio=2)
+        evQ.push(ev)
+        i += 1
+        t += dT
 
 
 if __name__ == '__main__':

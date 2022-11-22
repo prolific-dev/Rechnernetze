@@ -4,7 +4,6 @@
 # evCount: counter of all popped events
 # methods push, pop, and start as described in the problem description
 import heapq
-import threading
 from datetime import datetime
 from heapq import heapify
 
@@ -29,9 +28,7 @@ class EventQueue:
     def start():
         while EventQueue.q:
             event = EventQueue.pop()
-            t = threading.Thread(target=event.work, args=event.args)
-            t.start()
-            t.join()
+            event.work(event.args)
 
 
     @staticmethod
