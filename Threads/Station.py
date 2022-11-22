@@ -27,7 +27,7 @@ class Station:
                 customer: Customer = self.buffer.pop(0)
                 numItems = customer.einkaufsliste[0][2]
                 sleepTime = self.delay_per_item * numItems
-                sleep(sleepTime / 1000)
+                sleep(sleepTime)
                 Customer.served[self.name] += 1
                 self.fertig()
 
