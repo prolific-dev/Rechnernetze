@@ -5,9 +5,9 @@ from EventQueue import EventQueue
 from Event import Event
 from Station import Station
 
-f = open("supermarkt.txt", "w")
-fc = open("supermarkt_customer.txt", "w")
-fs = open("supermarkt_station.txt", "w")
+f = open("Threads\supermarkt.txt", "w")
+fc = open("Threads\supermarkt_customer.txt", "w")
+fs = open("Threads\supermarkt_station.txt", "w")
 
 
 # print on console and into supermarket log

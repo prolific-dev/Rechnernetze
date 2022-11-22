@@ -1,3 +1,5 @@
-Events/supermarkt.txt
-Events/supermarkt_customer.txt
-Events/supermarkt_station.txt
+.pyc
+__pycache__/
+
+.txt
+**/*.txt
