@@ -15,13 +15,20 @@ class Event:
         Event.counter += 1
 
     def __eq__(self, other):
-        return self.prio == other.prio
+        return self.t == other.t and self.prio == other.prio
 
     def __ne__(self, other):
-        return self.prio != other.prio
+        return self.t != other.t and self.prio != other.prio
 
     def __gt__(self, other):
-        return self.prio > other.prio
+        return self.t > other.t
 
     def __le__(self, other):
-        return self.prio < other.prio
+        return self.t < other.t
+
+    def __str__(self):
+        return f'timestamp:{self.t}\n' \
+               f'event count:{self.n}\n' \
+               f'work:{self.work.__name__}\n' \
+               f'args:{self.args}\n' \
+               f'prio:{self.prio}\n'

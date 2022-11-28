@@ -1,30 +1,34 @@
 from copy import copy
 
 from Customer import Customer
-from EventQueue import EventQueue
 from Event import Event
+from EventQueue import EventQueue
 from Station import Station
 
 f = open("./supermarkt.txt", "w")
 fc = open("./supermarkt_customer.txt", "w")
 fs = open("./supermarkt_station.txt", "w")
 
-simuFactor = 1000 # default 1
+simuFactor = 1  # default 1
+
 
 # print on console and into supermarket log
 def my_print(msg):
+    print(msg)
     f.write(msg + '\n')
 
 
 # print on console and into customer log
 def my_print1(customerName, stationName, msg):
     text = f'{EventQueue.getCurentTimeStamp()}s: {customerName} {msg} at {stationName}\n'
+    print(text)
     fc.write(text)
 
 
 # print on console and into station log
 def my_print2(stationName, msg, customerName):
     text = f'{EventQueue.getCurentTimeStamp()}s: {stationName} {msg} {customerName}\n'
+    print(text)
     fs.write(text)
 
 
@@ -56,16 +60,16 @@ if __name__ == '__main__':
     # stations bearbeitungszeit, stationsname, Anzahl zu kaufenden Produkte, MaxQueue Wartezeit
     einkaufsliste1 = [(10, baecker, 10, 10), (30, metzger, 5, 10), (45, kaese, 3, 5), (60, kasse, 30, 20)]
     einkaufsliste2 = [(30, metzger, 2, 5), (30, kasse, 3, 20), (20, baecker, 3, 20)]
-    startCustomers(einkaufsliste1, 'A', 0, 200, 30 * 60 + 1)
-    startCustomers(einkaufsliste2, 'B', 1, 60, 30 * 60 + 1)
+    startCustomers(einkaufsliste1, 'T1/K', 0, 200, 30 * 60 + 1)
+    startCustomers(einkaufsliste2, 'T2/K', 1, 60, 30 * 60 + 1)
     evQ.start()
 
-    my_print(f'Simulationsende: {EventQueue.getCurentTimeStamp()}')
+    my_print(f'Simulationsende: {EventQueue.getCurentTimeStamp()}')  # letzter einkäufer fertig
     my_print(f'Anzahl Kunden: {Customer.count}')
     my_print(f'Anzahl vollständige Einkäufe {Customer.complete}')
     x = Customer.duration / Customer.count
     my_print(f'Mittlere Einkaufsdauer {x:.2f}s')
-    x = Customer.duration_cond_complete / Customer.complete
+    x = 0 if Customer.complete == 0 else Customer.duration_cond_complete / Customer.complete
     my_print(f'Mittlere Einkaufsdauer (vollständig): {x:.2f}s')
 
     for station in ('Bäcker', 'Metzger', 'Käse', 'Kasse'):

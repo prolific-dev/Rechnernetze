@@ -24,21 +24,20 @@ class Customer:
         self.stationSkipped = False
 
     # beginn des einkaufs
-    #- Ereignis Ankunft an der ersten Station erzeugen
-    #- nächstes Ereignis Beginn des Einkaufs für den gleichen KundInnen-Typ erzeugen
-    def eventBeginnEinkauf(self, args=()):
+    # - Ereignis Ankunft an der ersten Station erzeugen
+    # - nächstes Ereignis Beginn des Einkaufs für den gleichen KundInnen-Typ erzeugen
+    def eventBeginnEinkauf(self, *args):
         from EventSimSkeleton import my_print
         my_print(f"{self.t.seconds}s: Beginn Einkauf {self.name}")
-        event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation,self.einkaufsliste[0], prio=2)
+        event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, self.einkaufsliste[0], prio=2)
         EventQueue.push(event)
 
-
-    #Ankun an einer Station
-    #- anhand der Warteschlangenlänge überprüfen, ob an der Station eingekauft wird
-    #- wenn eingekauft wird, entweder einreihen in die Warteschlange (Systemzustand ändern)
+    # Ankun an einer Station
+    # - anhand der Warteschlangenlänge überprüfen, ob an der Station eingekauft wird
+    # - wenn eingekauft wird, entweder einreihen in die Warteschlange (Systemzustand ändern)
     #  oder im Falle einer direkten Bedienung das Ereignis Verlassen der Sta on erzeugen
-    #- wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
-    def eventAnkuftStation(self, args=()):
+    # - wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
+    def eventAnkuftStation(self, *args):
         from EventSimSkeleton import my_print1, simuFactor
         einkauf = args
         tStation = einkauf[0] / simuFactor  # dauer bis ankunft bei station
@@ -57,7 +56,7 @@ class Customer:
             self.verlassen(skipped=True)
             self.stationSkipped = True
 
-    def verlassen(self,skipped=False):
+    def verlassen(self, skipped=False):
         event = Event(EventQueue.getCurentTimeStamp(), self.eventVerlassenStation, self.einkaufsliste[0], prio=1)
         EventQueue.push(event)
 
@@ -70,11 +69,11 @@ class Customer:
             Customer.duration_cond_complete += duration
 
     # Verlassen einer Station
-    #- Ereignis Ankun an der nächsten Station erzeugen
-    #- wenn sich weitere KundInnnen in der Warteschlange be nden, erste KundIn aus der
+    # - Ereignis Ankun an der nächsten Station erzeugen
+    # - wenn sich weitere KundInnnen in der Warteschlange be nden, erste KundIn aus der
     # Warteschlange nehmen und Ereignis Verlassen der Sta on für die nächste KundIn
     # erzeugen
-    def eventVerlassenStation(self, args=()):
+    def eventVerlassenStation(self, *args):
         from EventSimSkeleton import my_print1
 
         einkauf = args
@@ -91,4 +90,3 @@ class Customer:
             # supermarkt verlassen
             if not self.stationSkipped:
                 Customer.complete += 1
-

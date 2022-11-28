@@ -1,15 +1,16 @@
 from copy import deepcopy
 
 from Customer import Customer
-from EventQueue import EventQueue
 from Event import Event
+from EventQueue import EventQueue
 from Station import Station
 
 f = open("./supermarkt.txt", "w")
 fc = open("./supermarkt_customer.txt", "w")
 fs = open("./supermarkt_station.txt", "w")
 
-simuFactor = 1000  # default 1
+simuFactor = 1  # default 1
+
 
 # print on console and into supermarket log
 def my_print(msg):
@@ -41,6 +42,7 @@ def startCustomers(einkaufsliste, name, sT, dT, mT):
         i += 1
         t += dT
 
+
 if __name__ == '__main__':
     evQ = EventQueue()
     baecker = Station(10, 'Bäcker')
@@ -62,7 +64,7 @@ if __name__ == '__main__':
     startCustomers(einkaufsliste2, 'T2/K', 1, 60, 30 * 60 + 1)
     evQ.start()
 
-    my_print(f'Simulationsende: {EventQueue.getCurentTimeStamp()}') # letzter einkäufer fertig
+    my_print(f'Simulationsende: {EventQueue.getCurentTimeStamp()}')  # letzter einkäufer fertig
     my_print(f'Anzahl Kunden: {Customer.count}')
     my_print(f'Anzahl vollständige Einkäufe {Customer.complete}')
     x = Customer.duration / Customer.count

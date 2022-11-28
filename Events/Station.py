@@ -6,7 +6,6 @@
 from time import sleep
 
 from Customer import Customer
-from Events.EventQueue import EventQueue
 
 
 class Station:
@@ -26,12 +25,12 @@ class Station:
     def bedienen(self):
         import EventSimSkeleton
         self.busy = True
-        #print(f"{EventQueue.getCurentTimeStamp()}:{self.name} is busy")
+        # print(f"{EventQueue.getCurentTimeStamp()}:{self.name} is busy")
         while len(self.buffer):
             customer: Customer = self.buffer.pop(0)
             numItems = customer.einkaufsliste[0][2]
             sleepTime = self.delay_per_item * numItems / EventSimSkeleton.simuFactor
-            #print(f'{self.name} sleeptime {sleepTime}')
+            # print(f'{self.name} sleeptime {sleepTime}')
             sleep(sleepTime)
             EventSimSkeleton.my_print2(self.name, "bedient", customer.name)
             Customer.served[self.name] += 1
@@ -40,7 +39,7 @@ class Station:
 
     def fertig(self):
         self.busy = False
-        #print(f"{EventQueue.getCurentTimeStamp()}:{self.name} is finished")
+        # print(f"{EventQueue.getCurentTimeStamp()}:{self.name} is finished")
 
     def __str__(self):
         return f'name: {self.name}' \

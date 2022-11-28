@@ -16,7 +16,7 @@ class EventQueue:
 
     @staticmethod
     def push(ev):
-        #print(EventQueue.getEventList())
+        # print(EventQueue.getEventList())
         heapq.heappush(EventQueue.q, ev)
 
     @staticmethod
@@ -24,13 +24,11 @@ class EventQueue:
         EventQueue.evCount += 1
         return heapq.heappop(EventQueue.q)
 
-
     @staticmethod
     def start():
         while EventQueue.q:
             event = EventQueue.pop()
             event.work(event.args)
-
 
     @staticmethod
     def getCurentTimeStamp():
@@ -40,4 +38,3 @@ class EventQueue:
     @staticmethod
     def getEventList():
         return [f'prio: {item.prio}, timestamp:{item.t}' for item in EventQueue.q]
-
