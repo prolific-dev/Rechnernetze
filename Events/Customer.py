@@ -1,6 +1,7 @@
 # class consists of
 # statistics variables
 # and methods as described in the problem description
+from datetime import timedelta, datetime
 from time import sleep
 
 from Event import Event
@@ -18,16 +19,17 @@ class Customer:
     def __init__(self, einkaufsliste, name, t):
         self.einkaufsliste = einkaufsliste
         self.name = name
-        self.t = t
+        self.t = datetime.now() - EventQueue.startTime + timedelta(seconds=t)
         Customer.count += 1
+        self.stationSkipped = False
 
     # beginn des einkaufs
     #- Ereignis Ankunft an der ersten Station erzeugen
     #- nächstes Ereignis Beginn des Einkaufs für den gleichen KundInnen-Typ erzeugen
     def eventBeginnEinkauf(self, args=()):
         from EventSimSkeleton import my_print
-        my_print(f"{self.t}: Beginn Einkauf {self.name}")
-        event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=2)
+        my_print(f"{self.t.seconds}s: Beginn Einkauf {self.name}")
+        event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation,self.einkaufsliste[0], prio=2)
         EventQueue.push(event)
 
 
@@ -37,10 +39,9 @@ class Customer:
     #  oder im Falle einer direkten Bedienung das Ereignis Verlassen der Sta on erzeugen
     #- wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
     def eventAnkuftStation(self, args=()):
-        from EventSimSkeleton import my_print1
-        einkauf = self.einkaufsliste[0]
-        import EventSimSkeleton
-        tStation = einkauf[0] / EventSimSkeleton.simuFactor  # dauer bis ankunft bei station
+        from EventSimSkeleton import my_print1, simuFactor
+        einkauf = args
+        tStation = einkauf[0] / simuFactor  # dauer bis ankunft bei station
         sleep(tStation)
         station = einkauf[1]
 
@@ -53,10 +54,20 @@ class Customer:
             station.anstellen(self)
         else:
             Customer.dropped[station.name] += 1
+            self.verlassen(skipped=True)
+            self.stationSkipped = True
 
-        event = Event(EventQueue.getCurentTimeStamp(), self.eventVerlassenStation, prio=1)
+    def verlassen(self,skipped=False):
+        event = Event(EventQueue.getCurentTimeStamp(), self.eventVerlassenStation, self.einkaufsliste[0], prio=1)
         EventQueue.push(event)
 
+        # customer duration
+        duration = EventQueue.getCurentTimeStamp() - self.t.seconds
+        if skipped:
+            Customer.duration += duration
+        else:
+            Customer.duration += duration
+            Customer.duration_cond_complete += duration
 
     # Verlassen einer Station
     #- Ereignis Ankun an der nächsten Station erzeugen
@@ -66,13 +77,18 @@ class Customer:
     def eventVerlassenStation(self, args=()):
         from EventSimSkeleton import my_print1
 
-        einkauf = self.einkaufsliste.pop(0)
+        einkauf = args
         station = einkauf[1]
 
         my_print1(self.name, station.name, "Verlassen")
 
+        self.einkaufsliste.pop(0)
         if len(self.einkaufsliste):
-            event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, prio=3)
+            # station verlassen
+            event = Event(EventQueue.getCurentTimeStamp(), self.eventAnkuftStation, self.einkaufsliste[0], prio=3)
             EventQueue.push(event)
         else:
-            Customer.complete += 1
+            # supermarkt verlassen
+            if not self.stationSkipped:
+                Customer.complete += 1
+
