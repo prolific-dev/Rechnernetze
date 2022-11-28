@@ -73,7 +73,7 @@ if __name__ == '__main__':
     my_print(f'Mittlere Einkaufsdauer (vollständig): {x:.2f}s')
 
     for station in ('Bäcker', 'Metzger', 'Käse', 'Kasse'):
-        x = Customer.dropped[station] / (Customer.served[station] + Customer.dropped[station]) * 100
+        x = 0 if Customer.dropped[station] == 0 else Customer.dropped[station] / (Customer.served[station] + Customer.dropped[station]) * 100
         my_print(f'Drop percentage at {station}: {x:.2f}')
 
     f.close()
