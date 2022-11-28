@@ -24,6 +24,8 @@ class Station(Thread):
     def anstellen(self, customer: Customer):
         mutex.acquire()
         self.buffer.append(customer)
+        import EventSimSkeleton
+        EventSimSkeleton.my_print2(self.name, "neuer Kunde angestellt:", customer.name)
         mutex.release()
         if not self.busy:
             self.bedienen()
@@ -39,6 +41,7 @@ class Station(Thread):
             import EventSimSkeleton
             sleepTime = self.delay_per_item * numItems * EventSimSkeleton.simuFactor
             sleep(sleepTime)
+            EventSimSkeleton.my_print2(self.name, "bedient", customer.name)
             Customer.served[self.name] += 1
         self.fertig()
 

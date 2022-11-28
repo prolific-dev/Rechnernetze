@@ -18,6 +18,8 @@ class Station:
 
     def anstellen(self, customer: Customer):
         self.buffer.append(customer)
+        import EventSimSkeleton
+        EventSimSkeleton.my_print2(self.name, "neuer Kunde angestellt:", customer.name)
         if not self.busy:
             self.bedienen()
 
@@ -31,6 +33,7 @@ class Station:
             sleepTime = self.delay_per_item * numItems / EventSimSkeleton.simuFactor
             #print(f'{self.name} sleeptime {sleepTime}')
             sleep(sleepTime)
+            EventSimSkeleton.my_print2(self.name, "bedient", customer.name)
             Customer.served[self.name] += 1
             customer.verlassen()
         self.fertig()
