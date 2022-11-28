@@ -29,7 +29,7 @@ class Station:
             numItems = customer.einkaufsliste[0][2]
             import EventSimSkeleton
             sleepTime = self.delay_per_item * numItems / EventSimSkeleton.simuFactor
-            sleep(sleepTime / 1000)
+            sleep(sleepTime)
             EventSimSkeleton.my_print2(self.name, "bedient", customer.name)
             Customer.served[self.name] += 1
             
