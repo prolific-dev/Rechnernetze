@@ -35,12 +35,12 @@ def my_print2(stationName, msg, customerName):
 def startCustomers(einkaufsliste, name, sT, dT, mT):
     i = 1
     t = sT
-    #while t < mT:
-    kunde = Customer(deepcopy(einkaufsliste), name + str(i), t)
-    ev = Event(t, kunde.eventBeginnEinkauf, prio=2)
-    evQ.push(ev)
-    i += 1
-    t += dT
+    while t < mT:
+        kunde = Customer(deepcopy(einkaufsliste), name + str(i), t)
+        ev = Event(t, kunde.eventBeginnEinkauf, prio=2)
+        evQ.push(ev)
+        i += 1
+        t += dT
 
 
 if __name__ == '__main__':
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     # stations bearbeitungszeit, stationsname, Anzahl zu kaufenden Produkte, MaxQueue Wartezeit
     einkaufsliste1 = [(10, baecker, 10, 10), (30, metzger, 5, 10), (45, kaese, 3, 5), (60, kasse, 30, 20)]
     einkaufsliste2 = [(30, metzger, 2, 5), (30, kasse, 3, 20), (20, baecker, 3, 20)]
-    #startCustomers(einkaufsliste1, 'T1/K', 0, 200, 30 * 60 + 1)
+    startCustomers(einkaufsliste1, 'T1/K', 0, 200, 30 * 60 + 1)
     startCustomers(einkaufsliste2, 'T2/K', 1, 60, 30 * 60 + 1)
     evQ.start()
 

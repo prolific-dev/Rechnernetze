@@ -19,7 +19,7 @@ class Customer:
     def __init__(self, einkaufsliste, name, t):
         self.einkaufsliste = einkaufsliste
         self.name = name
-        self.t = 0
+        self.t = t
         Customer.count += 1
         self.stationSkipped = False
 
@@ -61,7 +61,6 @@ class Customer:
 
     def verlassen(self, skipped=False):
         from Events import EventSimSkeleton
-        time = 0
         if not skipped:
             numItems = self.einkaufsliste[0][2]
             station = self.einkaufsliste[0][1]
@@ -74,7 +73,7 @@ class Customer:
         EventQueue.push(event)
 
         # customer duration
-        duration = time
+        duration = sleepTime
         if skipped:
             Customer.duration += duration
         else:

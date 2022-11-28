@@ -15,28 +15,40 @@ class Event:
         Event.counter += 1
 
     def __eq__(self, other):
-        return self.n == other.n
+        return self.t == other.t
 
     def __ne__(self, other):
-        return self.n != other.n
+        return self.t != other.t
 
     def __gt__(self, other):
-        return self.n > other.n
+        return self.t > other.t
 
     def __le__(self, other):
-        return self.n < other.n
+        return self.t < other.t
 
-    #def __eq__(self, other):
+    # def __eq__(self, other):
+    #     return self.n == other.n
+
+    # def __ne__(self, other):
+    #     return self.n != other.n
+
+    # def __gt__(self, other):
+    #     return self.n > other.n
+
+    # def __le__(self, other):
+    #     return self.n < other.n
+
+    # def __eq__(self, other):
     #    return self.prio == other.prio
 
-#    def __ne__(self, other):
- #       return self.prio != other.prio
+    # def __ne__(self, other):
+    #    return self.prio != other.prio
 
-#    def __gt__(self, other):
-#        return self.prio > other.prio
+    # def __gt__(self, other):
+    #    return self.prio > other.prio
 
-  #  def __le__(self, other):
-   #     return self.prio < other.prio
+    # def __le__(self, other):
+    #    return self.prio < other.prio
 
     def __str__(self):
         return f'timestamp:{self.t}\n' \
