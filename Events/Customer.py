@@ -39,7 +39,7 @@ class Customer:
     # - wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
     def eventAnkuftStation(self, *args):
         from EventSimSkeleton import my_print1, simuFactor
-        einkauf = args
+        einkauf = args[0]
         tStation = einkauf[0] / simuFactor  # dauer bis ankunft bei station
         sleep(tStation)
         station = einkauf[1]
@@ -76,7 +76,7 @@ class Customer:
     def eventVerlassenStation(self, *args):
         from EventSimSkeleton import my_print1
 
-        einkauf = args
+        einkauf = args[0]
         station = einkauf[1]
 
         my_print1(self.name, station.name, "Verlassen")
