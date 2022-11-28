@@ -11,7 +11,7 @@ from heapq import heapify
 class EventQueue:
     q = []
     heapify(q)
-    startTime = datetime.now()
+    time = 0
     evCount = 0
 
     @staticmethod
@@ -29,11 +29,6 @@ class EventQueue:
         while EventQueue.q:
             event = EventQueue.pop()
             event.work(event.args)
-
-    @staticmethod
-    def getCurentTimeStamp():
-        timeDelta = datetime.now() - EventQueue.startTime
-        return timeDelta.seconds
 
     @staticmethod
     def getEventList():

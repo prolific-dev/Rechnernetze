@@ -20,14 +20,14 @@ def my_print(msg):
 
 # print on console and into customer log
 def my_print1(customerName, stationName, msg):
-    text = f'{EventQueue.getCurentTimeStamp()}s: {customerName} {msg} at {stationName}\n'
+    text = f'{EventQueue.time}s: {customerName} {msg} at {stationName}\n'
     print(text)
     fc.write(text)
 
 
 # print on console and into station log
 def my_print2(stationName, msg, customerName):
-    text = f'{EventQueue.getCurentTimeStamp()}s: {stationName} {msg} {customerName}\n'
+    text = f'{EventQueue.time}s: {stationName} {msg} {customerName}\n'
     print(text)
     fs.write(text)
 
@@ -35,12 +35,12 @@ def my_print2(stationName, msg, customerName):
 def startCustomers(einkaufsliste, name, sT, dT, mT):
     i = 1
     t = sT
-    while t < mT:
-        kunde = Customer(deepcopy(einkaufsliste), name + str(i), t)
-        ev = Event(t, kunde.eventBeginnEinkauf, prio=2)
-        evQ.push(ev)
-        i += 1
-        t += dT
+    #while t < mT:
+    kunde = Customer(deepcopy(einkaufsliste), name + str(i), t)
+    ev = Event(t, kunde.eventBeginnEinkauf, prio=2)
+    evQ.push(ev)
+    i += 1
+    t += dT
 
 
 if __name__ == '__main__':
@@ -60,11 +60,11 @@ if __name__ == '__main__':
     # stations bearbeitungszeit, stationsname, Anzahl zu kaufenden Produkte, MaxQueue Wartezeit
     einkaufsliste1 = [(10, baecker, 10, 10), (30, metzger, 5, 10), (45, kaese, 3, 5), (60, kasse, 30, 20)]
     einkaufsliste2 = [(30, metzger, 2, 5), (30, kasse, 3, 20), (20, baecker, 3, 20)]
-    startCustomers(einkaufsliste1, 'T1/K', 0, 200, 30 * 60 + 1)
+    #startCustomers(einkaufsliste1, 'T1/K', 0, 200, 30 * 60 + 1)
     startCustomers(einkaufsliste2, 'T2/K', 1, 60, 30 * 60 + 1)
     evQ.start()
 
-    my_print(f'Simulationsende: {EventQueue.getCurentTimeStamp()}')  # letzter einkäufer fertig
+    my_print(f'Simulationsende: {EventQueue.time}')  # letzter einkäufer fertig
     my_print(f'Anzahl Kunden: {Customer.count}')
     my_print(f'Anzahl vollständige Einkäufe {Customer.complete}')
     x = Customer.duration / Customer.count
