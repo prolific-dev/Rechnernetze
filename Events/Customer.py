@@ -30,8 +30,10 @@ class Customer:
         from EventSimSkeleton import my_print
         my_print(f"{self.t}s: Beginn Einkauf {self.name}")
 
-        event = Event(self.t, self.eventAnkuftStation, self.einkaufsliste[0], prio=2)
+        event = Event(EventQueue.time + self.einkaufsliste[0][0], self.eventAnkuftStation, self.einkaufsliste[0], prio=2)
         EventQueue.push(event)
+
+
 
     # Ankun an einer Station
     # - anhand der Warteschlangenlänge überprüfen, ob an der Station eingekauft wird
@@ -40,16 +42,17 @@ class Customer:
     # - wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
     def eventAnkuftStation(self, *args):
         from EventSimSkeleton import my_print1, simuFactor
+
+
         einkauf = args[0]
         tStation = einkauf[0] / simuFactor  # dauer bis ankunft bei station
-        EventQueue.time += tStation
+        #.time = tStation + self.t
         #sleep(tStation)
-        print(tStation)
+        #print(f"eventqueuetime + tstation + self.t: {tStation + self.t}")
         station = einkauf[1]
+        maxQueue = einkauf[3]
 
         my_print1(self.name, station.name, "Ankunft")
-
-        maxQueue = einkauf[3]
 
         # verlassen bei max queue
         if len(station.buffer) <= maxQueue:
@@ -59,18 +62,20 @@ class Customer:
             self.verlassen(skipped=True)
             self.stationSkipped = True
 
+
+
     def verlassen(self, skipped=False):
         from Events import EventSimSkeleton
+        sleepTime = 0
         if not skipped:
             numItems = self.einkaufsliste[0][2]
             station = self.einkaufsliste[0][1]
             sleepTime = station.delay_per_item * numItems / EventSimSkeleton.simuFactor
-            EventQueue.time += sleepTime
 
 
-
-        event = Event(EventQueue.time, self.eventVerlassenStation, self.einkaufsliste[0], prio=1)
+        event = Event(EventQueue.time + sleepTime, self.eventVerlassenStation, self.einkaufsliste[0], prio=1)
         EventQueue.push(event)
+
 
         # customer duration
         duration = sleepTime
@@ -91,15 +96,15 @@ class Customer:
         einkauf = args[0]
         station = einkauf[1]
 
-        my_print1(self.name, station.name, "Verlassen")
 
         self.einkaufsliste.pop(0)
         if len(self.einkaufsliste):
             # station verlassen
-            time = EventQueue.time
-            event = Event(time, self.eventAnkuftStation, self.einkaufsliste[0], prio=3)
+            event = Event(EventQueue.time + self.einkaufsliste[0][0], self.eventAnkuftStation, self.einkaufsliste[0], prio=3)
             EventQueue.push(event)
         else:
             # supermarkt verlassen
             if not self.stationSkipped:
                 Customer.complete += 1
+
+        my_print1(self.name, station.name, "Verlassen")
