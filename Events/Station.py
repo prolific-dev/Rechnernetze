@@ -3,10 +3,8 @@
 # buffer: customer queue
 # delay_per_item: service time
 # CustomerWaiting, busy: possible states of this station
-from time import sleep
 
 from Customer import Customer
-from Events.EventQueue import EventQueue
 
 
 class Station:
@@ -17,25 +15,24 @@ class Station:
         self.busy = False
 
     def anstellen(self, customer: Customer):
-        self.buffer.append(customer)
         import EventSimSkeleton
-        #EventSimSkeleton.my_print2(self.name, "neuer Kunde angestellt:", customer.name)
+        EventSimSkeleton.my_print2(self.name, "neuer Kunde angestellt:", customer.name)
+        self.buffer.append(customer)
         if not self.busy:
             self.bedienen()
 
-    def bedienen(self):
-        import EventSimSkeleton
-        self.busy = True
-        customer: Customer = self.buffer.pop(0)
 
-        #sleep(sleepTime)
-        #EventSimSkeleton.my_print2(self.name, "bedient", customer.name)
+    def bedienen(self):
+        self.busy = True
+        import EventSimSkeleton
+        customer: Customer = self.buffer.pop(0)
+        EventSimSkeleton.my_print2(self.name, "bedient", customer.name)
         Customer.served[self.name] += 1
         customer.verlassen()
-        self.fertig()
-
-    def fertig(self):
-        self.busy = False
+        if self.buffer:
+            self.bedienen()
+        else:
+            self.busy = False
 
     def __str__(self):
         return f'name: {self.name}' \

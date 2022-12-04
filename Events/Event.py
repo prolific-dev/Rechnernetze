@@ -21,9 +21,13 @@ class Event:
         return self.t != other.t
 
     def __gt__(self, other):
+        if self.t == other.t:
+            return self.prio > other.prio
         return self.t > other.t
 
     def __le__(self, other):
+        if self.t == other.t:
+            return self.prio < other.prio
         return self.t < other.t
 
 

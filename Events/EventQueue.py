@@ -28,7 +28,3 @@ class EventQueue:
             event = EventQueue.pop()
             EventQueue.time = event.t
             event.work(event.args)
-
-    @staticmethod
-    def getEventList():
-        return [f'prio: {item.prio}, timestamp:{item.t}' for item in EventQueue.q]

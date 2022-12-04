@@ -9,9 +9,6 @@ f = open("./supermarkt.txt", "w")
 fc = open("./supermarkt_customer.txt", "w")
 fs = open("./supermarkt_station.txt", "w")
 
-simuFactor = 1  # default 1
-
-
 # print on console and into supermarket log
 def my_print(msg):
     print(msg)
@@ -36,7 +33,7 @@ def startCustomers(einkaufsliste, name, sT, dT, mT):
     i = 1
     t = sT
     while t < mT:
-        kunde = Customer(deepcopy(einkaufsliste), name + str(i), t)
+        kunde = Customer(einkaufsliste, name + str(i), t)
         ev = Event(t, kunde.eventBeginnEinkauf, prio=2)
         evQ.push(ev)
         i += 1
