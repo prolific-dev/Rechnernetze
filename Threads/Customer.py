@@ -53,14 +53,12 @@ class Customer(threading.Thread):
 
     def verlassen(self, skipped=False):
         from Threads.EventSimSkeleton import my_print1, SIMU_FACTOR
-        sleepTime = 0
         numItems = self.einkaufsliste[self.einkaufsIndex][2]
         station = self.einkaufsliste[self.einkaufsIndex][1]
-        if not skipped:
-            sleepTime = station.delay_per_item * numItems / SIMU_FACTOR
-
         # customer duration
-        duration = sleepTime
+        duration = 0
+        if not skipped:
+            duration = station.delay_per_item * numItems / SIMU_FACTOR
         if skipped:
             Customer.duration += duration
         else:

@@ -84,7 +84,7 @@ if __name__ == '__main__':
     for thread in CUSTOMERTHREADS:
          thread.join()
 
-    my_print(f'Simulationsende: {time.time()}')  # letzter einkäufer fertig
+    my_print(f'Simulationsende: {round(time.time() - START_TIME)}s')  # letzter einkäufer fertig
     my_print(f'Anzahl Kunden: {Customer.count}')
     my_print(f'Anzahl vollständige Einkäufe {Customer.complete}')
     x = Customer.duration / Customer.count
