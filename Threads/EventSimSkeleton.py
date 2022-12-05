@@ -1,15 +1,19 @@
+import threading
+
 from Threads.Customer import Customer
 from Threads.Station import Station
 
 import time
 
 START_TIME = time.time()
+SIMU_FACTOR = 1
+CUSTOMERTHREADS = []
 
 f = open("./supermarkt.txt", "w")
 fc = open("./supermarkt_customer.txt", "w")
 fs = open("./supermarkt_station.txt", "w")
 
-SIMU_FACTOR = 1000
+
 
 # print on console and into supermarket log
 def my_print(msg):
@@ -19,30 +23,28 @@ def my_print(msg):
 
 # print on console and into customer log
 def my_print1(customerName, stationName, msg):
-    text = f'{time.time() - START_TIME:.2f}s: {customerName} {msg} at {stationName}\n'
+    text = f'{round(time.time() - START_TIME)}s: {customerName} {msg} at {stationName}\n'
     print(text)
     fc.write(text)
 
 
 # print on console and into station log
 def my_print2(stationName, msg, customerName):
-    text = f'{time.time() - START_TIME:.2f}s: {stationName} {msg} {customerName}\n'
+    text = f'{round(time.time() - START_TIME)}s: {stationName} {msg} {customerName}\n'
     print(text)
     fs.write(text)
 
 
-def startCustomers(einkaufsliste, name, sT, dT, mT):
-    threads = []
+def startCustomers(einkaufsliste, name, dT, mT):
     i = 1
-    t = sT
+    t = 0
     while t < mT:
-        thread = Customer(einkaufsliste, name + str(i), t)
-        threads.append(thread)
-        i += 1
+        thread = Customer(einkaufsliste, name + str(i), time.time() - START_TIME)
+        CUSTOMERTHREADS.append(thread)
         thread.start()
         time.sleep(dT / SIMU_FACTOR)
+        i += 1
         t += dT
-    return threads
 
 if __name__ == '__main__':
     baecker = Station(10, 'Bäcker')
@@ -68,12 +70,19 @@ if __name__ == '__main__':
     einkaufsliste1 = [(10, baecker, 10, 10), (30, metzger, 5, 10), (45, kaese, 3, 5), (60, kasse, 30, 20)]
     einkaufsliste2 = [(30, metzger, 2, 5), (30, kasse, 3, 20), (20, baecker, 3, 20)]
 
-    threads1 = startCustomers(einkaufsliste1, 'T1/K', 0, 200, 30 * 60 + 1)
-    threads2 = startCustomers(einkaufsliste2, 'T2/K', 1, 60, 30 * 60 + 1)
+    startCustomer1 = threading.Thread(target= startCustomers, args=(einkaufsliste1, 'T1/K', 200, 30 * 60 + 1))
+    startCustomer2 = threading.Thread(target= startCustomers, args=(einkaufsliste2, 'T2/K', 60, 30 * 60 + 1))
 
-    # warten bis alle kunden fertig sind
-    for thread in threads1 + threads2:
-        thread.join()
+    startCustomer1.start()
+    time.sleep(1)
+    startCustomer2.start()
+
+    startCustomer1.join()
+    startCustomer2.join()
+
+    # # warten bis alle kunden fertig sind
+    for thread in CUSTOMERTHREADS:
+         thread.join()
 
     my_print(f'Simulationsende: {time.time()}')  # letzter einkäufer fertig
     my_print(f'Anzahl Kunden: {Customer.count}')

@@ -24,7 +24,7 @@ class Customer(threading.Thread):
 
     def run(self):
         from Threads.EventSimSkeleton import my_print, my_print1, SIMU_FACTOR
-        my_print(f"{self.t}s: Beginn Einkauf {self.name}")
+        my_print(f"{round(self.t)}s: Beginn Einkauf {self.name}")
 
         while self.einkaufsIndex < len(self.einkaufsliste):
             einkauf = self.einkaufsliste[self.einkaufsIndex]
@@ -35,13 +35,10 @@ class Customer(threading.Thread):
             if len(station.buffer) <= maxQueue:
                 my_print1(self.name, station.name, "Ankunft")
                 numItems = einkauf[2]
-                stationTime = station.delay_per_item * numItems
-                ###################
                 servEv = threading.Event()
-                station.anstellen(self, stationTime, servEv)
+                station.anstellen(self, numItems, servEv)
                 station.arrEv.set()
                 servEv.wait()
-                ###################
             else:
                 Customer.dropped[station.name] += 1
                 self.verlassen(skipped=True)
@@ -52,37 +49,6 @@ class Customer(threading.Thread):
         # supermarkt verlassen
         if not self.stationSkipped:
             Customer.complete += 1
-
-    # beginn des einkaufs
-    # - Ereignis Ankunft an der ersten Station erzeugen
-    # - nächstes Ereignis Beginn des Einkaufs für den gleichen KundInnen-Typ erzeugen
-    def eventBeginnEinkauf(self, *args):
-        from EventSimSkeleton import my_print
-        my_print(f"{self.t}s: Beginn Einkauf {self.name}")
-
-        event = Event(EventQueue.time + self.einkaufsliste[self.einkaufsIndex][0], self.eventAnkuftStation, self.einkaufsliste[0], prio=2)
-        EventQueue.push(event)
-
-
-    # Ankunft an einer Station
-    # - anhand der Warteschlangenlänge überprüfen, ob an der Station eingekauft wird
-    # - wenn eingekauft wird, entweder einreihen in die Warteschlange (Systemzustand ändern)
-    #  oder im Falle einer direkten Bedienung das Ereignis Verlassen der Sta on erzeugen
-    # - wenn nicht eingekauft wird, direkt das Ereignis Ankunft an der nächsten Station erzeugen
-    def eventAnkuftStation(self, *args):
-        from EventSimSkeleton import my_print1
-        einkauf = args[0]
-        station = einkauf[1]
-        maxQueue = einkauf[3]
-
-        my_print1(self.name, station.name, "Ankunft")
-
-        if len(station.buffer) <= maxQueue:
-            station.anstellen(self)
-        else:
-            Customer.dropped[station.name] += 1
-            self.verlassen(skipped=True)
-            self.stationSkipped = True
 
 
     def verlassen(self, skipped=False):
@@ -100,28 +66,5 @@ class Customer(threading.Thread):
         else:
             Customer.duration += duration
             Customer.duration_cond_complete += duration
-
-        my_print1(self.name, station.name, "Verlassen")
-
-    # Verlassen einer Station
-    # - Ereignis Ankun an der nächsten Station erzeugen
-    # - wenn sich weitere KundInnnen in der Warteschlange be nden, erste KundIn aus der
-    # Warteschlange nehmen und Ereignis Verlassen der Sta on für die nächste KundIn
-    # erzeugen
-    def eventVerlassenStation(self, *args):
-        from EventSimSkeleton import my_print1
-
-        einkauf = args[0]
-        station = einkauf[1]
-
-        self.einkaufsIndex += 1
-        if self.einkaufsIndex < len(self.einkaufsliste):
-            # station verlassen
-            event = Event(EventQueue.time + self.einkaufsliste[self.einkaufsIndex][0], self.eventAnkuftStation, self.einkaufsliste[self.einkaufsIndex], prio=3)
-            EventQueue.push(event)
-        else:
-            # supermarkt verlassen
-            if not self.stationSkipped:
-                Customer.complete += 1
 
         my_print1(self.name, station.name, "Verlassen")

@@ -30,21 +30,21 @@ class Station(threading.Thread):
                 self.arrEv.clear()
 
 
-    def anstellen(self, customer, simutime, servEv):
+    def anstellen(self, customer, numItems, servEv):
         from Threads.EventSimSkeleton import my_print2
         my_print2(self.name, "neuer Kunde angestellt:", customer.name)
         lock.acquire()
-        self.buffer.append((customer, simutime, servEv))
+        self.buffer.append((customer, numItems, servEv))
         lock.release()
 
     def bedienen(self):
         from Threads.EventSimSkeleton import my_print2, SIMU_FACTOR
         self.busy = True
         lock.acquire()
-        customer, stationTime, servEv = self.buffer.pop(0)
+        customer, numItems, servEv = self.buffer.pop(0)
         lock.release()
         my_print2(self.name, "bedient", customer.name)
-        time.sleep(stationTime * self.delay_per_item / SIMU_FACTOR)
+        time.sleep(numItems * self.delay_per_item / SIMU_FACTOR)
         servEv.set()
         Customer.served[self.name] += 1
         customer.verlassen()
