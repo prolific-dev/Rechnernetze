@@ -61,7 +61,7 @@ if __name__ == '__main__':
     startCustomers(einkaufsliste2, 'T2/K', 1, 60, 30 * 60 + 1)
     evQ.start()
 
-    my_print(f'Simulationsende: {EventQueue.time}')  # letzter einkäufer fertig
+    my_print(f'Simulationsende: {EventQueue.time}s')  # letzter einkäufer fertig
     my_print(f'Anzahl Kunden: {Customer.count}')
     my_print(f'Anzahl vollständige Einkäufe {Customer.complete}')
     x = Customer.duration / Customer.count
