@@ -3,54 +3,53 @@
 # buffer: customer queue
 # delay_per_item: service time
 # CustomerWaiting, busy: possible states of this station
-from threading import Thread, Event, Lock
-from time import sleep
+import threading
+import time
 
-from Customer import Customer
+from Threads.Customer import Customer
 
-mutex = Lock()
+lock = threading.Lock()
 
-
-class Station(Thread):
+class Station(threading.Thread):
     def __init__(self, delay_per_item: int, name: str) -> None:
-        Thread.__init__(self)
+        threading.Thread.__init__(self)
+
         self.delay_per_item = delay_per_item
         self.name = name
         self.buffer = []
         self.busy = False
 
-        #self.CustomerWaitingEv = Event()
+        self.arrEv = threading.Event()
 
-    def anstellen(self, customer: Customer):
-        mutex.acquire()
-        self.buffer.append(customer)
-        import EventSimSkeleton
-        EventSimSkeleton.my_print2(self.name, "neuer Kunde angestellt:", customer.name)
-        mutex.release()
-        if not self.busy:
-            self.bedienen()
+    def run(self):
+        while True:
+            self.arrEv.wait()
+            if self.buffer:
+                self.bedienen()
+            else:
+                self.arrEv.clear()
+
+
+    def anstellen(self, customer, simutime, servEv):
+        from Threads.EventSimSkeleton import my_print2
+        my_print2(self.name, "neuer Kunde angestellt:", customer.name)
+        lock.acquire()
+        self.buffer.append((customer, simutime, servEv))
+        lock.release()
 
     def bedienen(self):
-        import EventSimSkeleton
+        from Threads.EventSimSkeleton import my_print2, SIMU_FACTOR
         self.busy = True
-        # print(f"{EventQueue.getCurentTimeStamp()}:{self.name} is busy")
-        while len(self.buffer):
-            mutex.acquire()
-            customer: Customer = self.buffer.pop(0)
-            mutex.release()
-            numItems = customer.einkaufsliste[0][2]
-            sleepTime = self.delay_per_item * numItems / EventSimSkeleton.simuFactor
-            # print(f'{self.name} sleeptime {sleepTime}')
-            sleep(sleepTime)
-            EventSimSkeleton.my_print2(self.name, "bedient", customer.name)
-            Customer.served[self.name] += 1
-            customer.verlassen()
-        self.fertig()
-
-    def fertig(self):
-        self.busy = False
-        # print(f"{EventQueue.getCurentTimeStamp()}:{self.name} is finished")
-        #self.CustomerWaitingEv.wait()
+        lock.acquire()
+        customer, stationTime, servEv = self.buffer.pop(0)
+        lock.release()
+        my_print2(self.name, "bedient", customer.name)
+        time.sleep(stationTime * self.delay_per_item / SIMU_FACTOR)
+        servEv.set()
+        Customer.served[self.name] += 1
+        customer.verlassen()
+        if not self.buffer:
+            self.busy = False
 
     def __str__(self):
         return f'name: {self.name}' \
