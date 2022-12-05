@@ -5,6 +5,7 @@
 import threading
 import time
 
+
 class Customer(threading.Thread):
     served = {}
     dropped = {}
@@ -27,18 +28,19 @@ class Customer(threading.Thread):
         my_print(f"{round(self.t)}s: Beginn Einkauf {self.name}")
 
         while self.einkaufsIndex < len(self.einkaufsliste):
+            # zur nächsten station gehen
             einkauf = self.einkaufsliste[self.einkaufsIndex]
             timeStationArrived = einkauf[0]
             station = einkauf[1]
             maxQueue = einkauf[3]
             time.sleep(timeStationArrived / SIMU_FACTOR)
+            # anstehen wenn schlange nicht zu lang, sonst station überspringen
             if len(station.buffer) <= maxQueue:
                 my_print1(self.name, station.name, "Ankunft")
                 numItems = einkauf[2]
                 servEv = threading.Event()
                 station.anstellen(self, numItems, servEv)
-                station.arrEv.set()
-                servEv.wait()
+                servEv.wait()  # warten bis man in der warteschlange bedient wurde
             else:
                 Customer.dropped[station.name] += 1
                 self.verlassen(skipped=True)
@@ -49,7 +51,6 @@ class Customer(threading.Thread):
         # supermarkt verlassen
         if not self.stationSkipped:
             Customer.complete += 1
-
 
     def verlassen(self, skipped=False):
         from Threads.EventSimSkeleton import my_print1, SIMU_FACTOR

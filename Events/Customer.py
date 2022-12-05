@@ -29,9 +29,9 @@ class Customer:
         from EventSimSkeleton import my_print
         my_print(f"{self.t}s: Beginn Einkauf {self.name}")
 
-        event = Event(EventQueue.time + self.einkaufsliste[self.einkaufsIndex][0], self.eventAnkuftStation, self.einkaufsliste[0], prio=2)
+        event = Event(EventQueue.time + self.einkaufsliste[self.einkaufsIndex][0], self.eventAnkuftStation,
+                      self.einkaufsliste[0], prio=2)
         EventQueue.push(event)
-
 
     # Ankunft an einer Station
     # - anhand der Warteschlangenlänge überprüfen, ob an der Station eingekauft wird
@@ -53,7 +53,6 @@ class Customer:
             self.verlassen(skipped=True)
             self.stationSkipped = True
 
-
     def verlassen(self, skipped=False):
         sleepTime = 0
         if not skipped:
@@ -61,7 +60,8 @@ class Customer:
             station = self.einkaufsliste[self.einkaufsIndex][1]
             sleepTime = station.delay_per_item * numItems
 
-        event = Event(EventQueue.time + sleepTime, self.eventVerlassenStation, self.einkaufsliste[self.einkaufsIndex], prio=1)
+        event = Event(EventQueue.time + sleepTime, self.eventVerlassenStation, self.einkaufsliste[self.einkaufsIndex],
+                      prio=1)
         EventQueue.push(event)
 
         # customer duration
@@ -86,7 +86,8 @@ class Customer:
         self.einkaufsIndex += 1
         if self.einkaufsIndex < len(self.einkaufsliste):
             # station verlassen
-            event = Event(EventQueue.time + self.einkaufsliste[self.einkaufsIndex][0], self.eventAnkuftStation, self.einkaufsliste[self.einkaufsIndex], prio=3)
+            event = Event(EventQueue.time + self.einkaufsliste[self.einkaufsIndex][0], self.eventAnkuftStation,
+                          self.einkaufsliste[self.einkaufsIndex], prio=3)
             EventQueue.push(event)
         else:
             # supermarkt verlassen

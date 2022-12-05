@@ -21,7 +21,6 @@ class Station:
         if not self.busy:
             self.bedienen()
 
-
     def bedienen(self):
         self.busy = True
         import EventSimSkeleton

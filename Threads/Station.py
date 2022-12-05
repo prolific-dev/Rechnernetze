@@ -10,6 +10,7 @@ from Threads.Customer import Customer
 
 lock = threading.Lock()
 
+
 class Station(threading.Thread):
     def __init__(self, delay_per_item: int, name: str) -> None:
         threading.Thread.__init__(self)
@@ -19,16 +20,15 @@ class Station(threading.Thread):
         self.buffer = []
         self.busy = False
 
-        self.arrEv = threading.Event()
+        self.CustomerWaitingEv = threading.Event()
 
     def run(self):
         while True:
-            self.arrEv.wait()
+            self.CustomerWaitingEv.wait()  # warten bis sich jemand anstellt
             if self.buffer:
                 self.bedienen()
             else:
-                self.arrEv.clear()
-
+                self.CustomerWaitingEv.clear()  # erneut auf neuen kunden warten
 
     def anstellen(self, customer, numItems, servEv):
         from Threads.EventSimSkeleton import my_print2
@@ -36,6 +36,7 @@ class Station(threading.Thread):
         lock.acquire()
         self.buffer.append((customer, numItems, servEv))
         lock.release()
+        self.CustomerWaitingEv.set()  # kunde in schlange, bedienung starten
 
     def bedienen(self):
         from Threads.EventSimSkeleton import my_print2, SIMU_FACTOR
@@ -45,10 +46,12 @@ class Station(threading.Thread):
         lock.release()
         my_print2(self.name, "bedient", customer.name)
         time.sleep(numItems * self.delay_per_item / SIMU_FACTOR)
-        servEv.set()
+        servEv.set()  # kunde wurde bedient und kann zur nächsten station
         Customer.served[self.name] += 1
         customer.verlassen()
-        if not self.buffer:
+        if self.buffer:
+            self.bedienen()
+        else:
             self.busy = False
 
     def __str__(self):

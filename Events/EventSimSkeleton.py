@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 from Customer import Customer
 from Event import Event
 from EventQueue import EventQueue
@@ -8,6 +6,7 @@ from Station import Station
 f = open("./supermarkt.txt", "w")
 fc = open("./supermarkt_customer.txt", "w")
 fs = open("./supermarkt_station.txt", "w")
+
 
 # print on console and into supermarket log
 def my_print(msg):
@@ -70,7 +69,8 @@ if __name__ == '__main__':
     my_print(f'Mittlere Einkaufsdauer (vollständig): {x:.2f}s')
 
     for station in ('Bäcker', 'Metzger', 'Käse', 'Kasse'):
-        x = 0 if Customer.dropped[station] == 0 else Customer.dropped[station] / (Customer.served[station] + Customer.dropped[station]) * 100
+        x = 0 if Customer.dropped[station] == 0 else Customer.dropped[station] / (
+                    Customer.served[station] + Customer.dropped[station]) * 100
         my_print(f'Drop percentage at {station}: {x:.2f}')
 
     f.close()

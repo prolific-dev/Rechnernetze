@@ -30,7 +30,6 @@ class Event:
             return self.prio < other.prio
         return self.t < other.t
 
-
     def __str__(self):
         return f'timestamp:{self.t}\n' \
                f'event count:{self.n}\n' \
