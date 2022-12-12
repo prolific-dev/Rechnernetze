@@ -8,9 +8,9 @@ START_TIME = time.time()
 SIMU_FACTOR = 1000
 CUSTOMERTHREADS = []
 
-f = open("./supermarkt.txt", "w")
-fc = open("./supermarkt_customer.txt", "w")
-fs = open("./supermarkt_station.txt", "w")
+f = open("./Einführung_Python/Threads/supermarkt.txt", "w")
+fc = open("./Einführung_Python/Threads/supermarkt_customer.txt", "w")
+fs = open("./Einführung_Python/Threads/supermarkt_station.txt", "w")
 
 
 # print on console and into supermarket log

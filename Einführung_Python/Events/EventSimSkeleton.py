@@ -3,9 +3,9 @@ from Event import Event
 from EventQueue import EventQueue
 from Station import Station
 
-f = open("./supermarkt.txt", "w")
-fc = open("./supermarkt_customer.txt", "w")
-fs = open("./supermarkt_station.txt", "w")
+f = open("./Einführung_Python/Events/supermarkt.txt", "w")
+fc = open("./Einführung_Python/Events/supermarkt_customer.txt", "w")
+fs = open("./Einführung_Python/Events/supermarkt_station.txt", "w")
 
 
 # print on console and into supermarket log
