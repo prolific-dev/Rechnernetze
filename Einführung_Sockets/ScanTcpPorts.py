@@ -17,22 +17,16 @@ def start_client(*args):
     try:
         print(f"Connecting to TCP server with IP {SERVER_IP} on Port {port}")
         sock.connect((SERVER_IP, port))
-
         print(f"Sending message {MESSAGE}")
         sock.send(MESSAGE.encode('utf-8'))
-
-        try:
-            msg = sock.recv(1024).decode('utf-8')
-            print(f"Message received; {msg}")
-        except socket.timeout:
-            OPEN_PORTS_DICT[port] = f"Socket timed out at {time.asctime()}"
-            return
-
-        OPEN_PORTS_DICT[port] = 'Open'
-        sock.close()
+        msg = sock.recv(1024).decode('utf-8')
+        print(f"Message received; {msg}")
     except Exception as e:
         OPEN_PORTS_DICT[port] = e
+        return
 
+    OPEN_PORTS_DICT[port] = 'Open'
+    sock.close()
 
 def main():
     threads = []
