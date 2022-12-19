@@ -20,12 +20,10 @@ def start_client(*args):
         print(f"Sending message {MESSAGE}")
         sock.send(MESSAGE.encode('utf-8'))
         msg = sock.recv(1024).decode('utf-8')
-        print(f"Message received; {msg}")
+        OPEN_PORTS_DICT[port] = f"Message received; {msg}"
     except Exception as e:
         OPEN_PORTS_DICT[port] = e
-        return
 
-    OPEN_PORTS_DICT[port] = 'Open'
     sock.close()
 
 def main():

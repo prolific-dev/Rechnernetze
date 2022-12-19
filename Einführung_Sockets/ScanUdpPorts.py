@@ -18,12 +18,10 @@ def start_client(*args):
     try:
         sock.sendto(MESSAGE.encode('utf-8'), (SERVER_IP, port))
         data, addr = sock.recvfrom(1024)
-        print(f"received message: {data.decode('utf-8')} from {addr}")
+        OPEN_PORTS_DICT[port] = f"received message: {data.decode('utf-8')} from {addr}"
     except Exception as e:
         OPEN_PORTS_DICT[port] = e
-        return
 
-    OPEN_PORTS_DICT[port] = 'Open'
     sock.close()
 
 
