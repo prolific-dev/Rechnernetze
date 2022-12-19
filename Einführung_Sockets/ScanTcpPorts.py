@@ -4,6 +4,7 @@ import time
 
 SERVER_IP = '127.0.0.1'
 PORTS = [*range(1, 51)]
+OPEN_PORTS = []
 MESSAGE = 'Hello, World!'
 
 
@@ -24,11 +25,10 @@ def start_client(*args):
             print(f"Message received; {msg}")
         except socket.timeout:
             print(f"Socket timed out at {time.asctime()}")
-
+        OPEN_PORTS.append(port)
         sock.close()
     except:
         print(f'could not connect to port {port}')
-        return
 
 
 def main():
@@ -40,6 +40,12 @@ def main():
 
     for thread in threads:
         thread.join()
+
+    open_ports = 'Open Ports:'
+    for port in OPEN_PORTS:
+        open_ports += f'{port}'
+
+    print(open_ports)
 
 
 if __name__ == '__main__':
