@@ -2,8 +2,8 @@ import socket
 import threading
 import time
 
-#SERVER_IP = '127.0.0.1'
-SERVER_IP = '141.37.168.26' # with vpn
+# SERVER_IP = '127.0.0.1'
+SERVER_IP = '141.37.168.26'  # with vpn
 PORTS = [*range(1, 51)]
 OPEN_PORTS = []
 MESSAGE = 'Hello, World!'
@@ -26,6 +26,8 @@ def start_client(*args):
             print(f"Message received; {msg}")
         except socket.timeout:
             print(f"Socket timed out at {time.asctime()}")
+            return
+
         OPEN_PORTS.append(port)
         sock.close()
     except:
@@ -43,7 +45,7 @@ def main():
         thread.join()
 
     open_ports = 'Open Ports:'
-    for port in OPEN_PORTS:
+    for port in sorted(OPEN_PORTS):
         open_ports += f' {port}'
 
     print(open_ports)

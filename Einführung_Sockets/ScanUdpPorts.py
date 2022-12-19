@@ -23,6 +23,8 @@ def start_client(*args):
             print(f"received message: {data.decode('utf-8')} from {addr}")
         except socket.timeout:
             print(f"Socket timed out at {time.asctime()}")
+            return
+
         OPEN_PORTS.append(port)
         sock.close()
     except:
@@ -40,7 +42,7 @@ def main():
         thread.join()
 
     open_ports = 'Open Ports:'
-    for port in OPEN_PORTS:
+    for port in sorted(OPEN_PORTS):
         open_ports += f' {port}'
 
     print(open_ports)
