@@ -12,7 +12,7 @@ MESSAGE = 'Hello, World!'
 def start_client(*args):
     port = args[0]
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.settimeout(3)
+    sock.settimeout(10)
 
     try:
         print(f"Connecting to TCP server with IP {SERVER_IP} on Port {port}")

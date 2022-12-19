@@ -13,7 +13,7 @@ def start_client(*args):
     port = args[0]
     print(f"Sending message {MESSAGE} to UDP server with IP {SERVER_IP} on Port {port}")
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.settimeout(3)
+    sock.settimeout(10)
 
     try:
         sock.sendto(MESSAGE.encode('utf-8'), (SERVER_IP, port))
