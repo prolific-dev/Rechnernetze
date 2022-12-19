@@ -5,7 +5,7 @@ import time
 # SERVER_IP = '127.0.0.1'
 SERVER_IP = '141.37.168.26'  # with vpn
 PORTS = [*range(1, 51)]
-OPEN_PORTS = []
+OPEN_PORTS_DICT = {}
 MESSAGE = 'Hello, World!'
 
 
@@ -25,13 +25,13 @@ def start_client(*args):
             msg = sock.recv(1024).decode('utf-8')
             print(f"Message received; {msg}")
         except socket.timeout:
-            print(f"Socket timed out at {time.asctime()}")
+            OPEN_PORTS_DICT[port] = f"Socket timed out at {time.asctime()}"
             return
 
-        OPEN_PORTS.append(port)
+        OPEN_PORTS_DICT[port] = 'Open'
         sock.close()
-    except:
-        print(f'could not connect to port {port}')
+    except Exception as e:
+        OPEN_PORTS_DICT[port] = e
 
 
 def main():
@@ -44,12 +44,9 @@ def main():
     for thread in threads:
         thread.join()
 
-    open_ports = 'Open Ports:'
-    for port in sorted(OPEN_PORTS):
-        open_ports += f' {port}'
-
-    print(open_ports)
-
+    print('result:')
+    for port, status in sorted(OPEN_PORTS_DICT.items()):
+        print(f'Port {port}: {status}')
 
 if __name__ == '__main__':
     main()
