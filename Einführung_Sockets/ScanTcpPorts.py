@@ -1,6 +1,5 @@
 import socket
 import threading
-import time
 
 # SERVER_IP = '127.0.0.1'
 SERVER_IP = '141.37.168.26'  # with vpn
@@ -26,6 +25,7 @@ def start_client(*args):
 
     sock.close()
 
+
 def main():
     threads = []
     for port in PORTS:
@@ -39,6 +39,7 @@ def main():
     print('result:')
     for port, status in sorted(OPEN_PORTS_DICT.items()):
         print(f'Port {port}: {status}')
+
 
 if __name__ == '__main__':
     main()

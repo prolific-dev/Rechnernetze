@@ -1,9 +1,8 @@
 import socket
 import threading
-import time
 
-#SERVER_IP = '127.0.0.1'
-SERVER_IP = '141.37.168.26' # with vpn
+# SERVER_IP = '127.0.0.1'
+SERVER_IP = '141.37.168.26'  # with vpn
 PORTS = [*range(1, 51)]
 OPEN_PORTS_DICT = {}
 MESSAGE = 'Hello, World!'

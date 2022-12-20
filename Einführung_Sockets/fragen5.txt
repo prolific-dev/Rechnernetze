@@ -1,0 +1,7 @@
+1.
+TCP: 7, 17, 19
+UDP: 7, 13, 17, 19
+2.
+screenshots
+3.
+Echo Server Anwortet jeweils mit der Nachricht die wir gesendet haben.
